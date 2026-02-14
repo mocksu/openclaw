@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "deviceId": "823d5d9a44cc1adba49bacf43c5b727ac50af9174f87975c48daa4f761885956",
+  "tokens": {
+    "operator": {
+      "token": "369304949cab4f16894cd45728b61509",
+      "role": "operator",
+      "scopes": [
+        "operator.admin",
+        "operator.approvals",
+        "operator.pairing"
+      ],
+      "updatedAtMs": 1771001000634
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "pdf-extract": {
+      "version": "1.0.0",
+      "installedAt": 1770885125646
+    },
+    "gog": {
+      "version": "1.0.0",
+      "installedAt": 1770875276198
+    },
+    "mcporter": {
+      "version": "1.0.0",
+      "installedAt": 1770875299131
+    },
+    "clawdbot-filesystem": {
+      "version": "1.0.2",
+      "installedAt": 1770885128618
+    },
+    "file-search": {
+      "version": "1.0.0",
+      "installedAt": 1770885004298
+    }
+  }
+}
