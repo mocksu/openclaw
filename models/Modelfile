@@ -1,0 +1,12 @@
+FROM /home/moxu/.openclaw/models/Qwen3-Next-REAP-15B-A3B-Thinking-Q4_K_XL.gguf
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+<|thought|>
+"""

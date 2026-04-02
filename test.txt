@@ -1,0 +1,34 @@
+cat <<'EOF' > ~/.openclaw/workspace/skills/stock/SKILL.md
+---
+name: stock
+description: "CRITICAL: You MUST use this skill whenever the user asks for a stock price or market data. Required parameter: ticker symbol (e.g., WDC)."
+---
+
+# Stock Skill
+Use this script to get real-time stock prices.
+
+## Commands
+
+```bash
+# Example to check WDC price
+python3 ~/.openclaw/workspace/skills/stock/main.py WDC
+EOF
+
+
+#### 2. 修复 Mac 桥接技能 (mac-bridge)
+```bash
+cat <<'EOF' > ~/.openclaw/workspace/skills/mac-bridge/SKILL.md
+---
+name: mac-bridge
+description: "CRITICAL: You MUST use this skill whenever the user asks to interact with, list files, or execute commands on their Mac (mxmac.local)."
+---
+
+# Mac-Bridge Skill
+Execute remote commands on the user's Mac via SSH.
+
+## Commands
+
+```bash
+# Example to list Documents folder
+python3 ~/.openclaw/workspace/skills/mac-bridge/main.py "ls ~/Documents"
+EOF

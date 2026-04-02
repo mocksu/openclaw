@@ -1,0 +1,1 @@
+python skills/resume_matcher.py <path_to_resume.pdf> test_jd.txt

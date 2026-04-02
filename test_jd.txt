@@ -1,0 +1,25 @@
+Job Description: Data Scientist Position
+
+We are looking for a skilled Data Scientist to join our analytics team. The ideal candidate will have strong programming skills and experience with data analysis tools.
+
+Required Skills:
+- Python programming
+- R statistical programming
+- Machine learning
+- Data visualization
+- SQL database querying
+- Statistical analysis
+- Pandas and NumPy libraries
+- Scikit-learn
+
+Responsibilities:
+- Analyze large datasets to extract insights
+- Build predictive models using Python and R
+- Create visualizations for stakeholders
+- Collaborate with cross-functional teams
+- Present findings to management
+
+Qualifications:
+- Bachelor's or Master's degree in Statistics, Computer Science, or related field
+- 3+ years of experience in data analysis
+- Strong proficiency in Python and R

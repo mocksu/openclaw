@@ -9,17 +9,20 @@ _openclaw_root_completion() {
     "(--version -V)"{--version,-V}"[output the version number]" \
     "--dev[Dev profile: isolate state under ~/.openclaw-dev, default gateway port 19001, and shift derived ports (browser/canvas)]" \
     "--profile[Use a named profile (isolates OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under ~/.openclaw-<name>)]" \
+    "--log-level[Global log level override for file + console (silent|fatal|error|warn|info|debug|trace)]" \
     "--no-color[Disable ANSI colors]" \
-    "1: :_values 'command' 'setup[Initialize ~/.openclaw/openclaw.json and the agent workspace]' 'onboard[Interactive wizard to set up the gateway, workspace, and skills]' 'configure[Interactive prompt to set up credentials, devices, and agent defaults]' 'config[Config helpers (get/set/unset). Run without subcommand for the wizard.]' 'doctor[Health checks + quick fixes for the gateway and channels]' 'dashboard[Open the Control UI with your current token]' 'reset[Reset local config/state (keeps the CLI installed)]' 'uninstall[Uninstall the gateway service + local data (CLI remains)]' 'message[Send messages and channel actions]' 'memory[Memory search tools]' 'agent[Run an agent turn via the Gateway (use --local for embedded)]' 'agents[Manage isolated agents (workspaces + auth + routing)]' 'status[Show channel health and recent session recipients]' 'health[Fetch health from the running gateway]' 'sessions[List stored conversation sessions]' 'browser[Manage OpenClaw'\''s dedicated browser (Chrome/Chromium)]' 'completion[Generate shell completion script]' 'acp[Run an ACP bridge backed by the Gateway]' 'gateway[Run the WebSocket Gateway]' 'daemon[Manage the Gateway service (launchd/systemd/schtasks)]' 'logs[Tail gateway file logs via RPC]' 'system[System tools (events, heartbeat, presence)]' 'models[Model discovery, scanning, and configuration]' 'approvals[Manage exec approvals (gateway or node host)]' 'nodes[Manage gateway-owned node pairing]' 'devices[Device pairing and auth tokens]' 'node[Run a headless node host (system.run/system.which)]' 'sandbox[Manage sandbox containers (Docker-based agent isolation)]' 'tui[Open a terminal UI connected to the Gateway]' 'cron[Manage cron jobs (via Gateway)]' 'dns[DNS helpers for wide-area discovery (Tailscale + CoreDNS)]' 'docs[Search the live OpenClaw docs]' 'hooks[Manage internal agent hooks]' 'webhooks[Webhook helpers and integrations]' 'pairing[Secure DM pairing (approve inbound requests)]' 'plugins[Manage OpenClaw plugins/extensions]' 'channels[Manage chat channel accounts]' 'directory[Directory lookups (self, peers, groups) for channels that support it]' 'security[Security tools (audit)]' 'skills[List and inspect available skills]' 'update[Update OpenClaw to the latest version]'" \
+    "1: :_values 'command' 'completion[Generate shell completion script]' 'setup[Initialize ~/.openclaw/openclaw.json and the agent workspace]' 'onboard[Interactive wizard to set up the gateway, workspace, and skills]' 'configure[Interactive setup wizard for credentials, channels, gateway, and agent defaults]' 'config[Non-interactive config helpers (get/set/unset/file/validate). Run without subcommand for the setup wizard.]' 'backup[Create and verify local backup archives for OpenClaw state]' 'doctor[Health checks + quick fixes for the gateway and channels]' 'dashboard[Open the Control UI with your current token]' 'reset[Reset local config/state (keeps the CLI installed)]' 'uninstall[Uninstall the gateway service + local data (CLI remains)]' 'message[Send, read, and manage messages and channel actions]' 'memory[Search, inspect, and reindex memory files]' 'agent[Run an agent turn via the Gateway (use --local for embedded)]' 'agents[Manage isolated agents (workspaces + auth + routing)]' 'status[Show channel health and recent session recipients]' 'health[Fetch health from the running gateway]' 'sessions[List stored conversation sessions]' 'browser[Manage OpenClaw'\''s dedicated browser (Chrome/Chromium)]' 'acp[Run an ACP bridge backed by the Gateway]' 'gateway[Run, inspect, and query the WebSocket Gateway]' 'daemon[Manage the Gateway service (launchd/systemd/schtasks)]' 'logs[Tail gateway file logs via RPC]' 'system[System tools (events, heartbeat, presence)]' 'models[Model discovery, scanning, and configuration]' 'approvals[Manage exec approvals (gateway or node host)]' 'nodes[Manage gateway-owned nodes (pairing, status, invoke, and media)]' 'devices[Device pairing and auth tokens]' 'node[Run and manage the headless node host service]' 'sandbox[Manage sandbox containers (Docker-based agent isolation)]' 'tui[Open a terminal UI connected to the Gateway]' 'cron[Manage cron jobs (via Gateway)]' 'dns[DNS helpers for wide-area discovery (Tailscale + CoreDNS)]' 'docs[Search the live OpenClaw docs]' 'hooks[Manage internal agent hooks]' 'webhooks[Webhook helpers and integrations]' 'qr[Generate an iOS pairing QR code and setup code]' 'clawbot[Legacy clawbot command aliases]' 'pairing[Secure DM pairing (approve inbound requests)]' 'plugins[Manage OpenClaw plugins and extensions]' 'channels[Manage connected chat channels and accounts]' 'directory[Lookup contact and group IDs (self, peers, groups) for supported chat channels]' 'security[Audit local config and state for common security foot-guns]' 'secrets[Secrets runtime controls]' 'skills[List and inspect available skills]' 'update[Update OpenClaw and inspect update channel status]'" \
     "*::arg:->args"
 
   case $state in
     (args)
       case $line[1] in
+        (completion) _openclaw_completion ;;
         (setup) _openclaw_setup ;;
         (onboard) _openclaw_onboard ;;
         (configure) _openclaw_configure ;;
         (config) _openclaw_config ;;
+        (backup) _openclaw_backup ;;
         (doctor) _openclaw_doctor ;;
         (dashboard) _openclaw_dashboard ;;
         (reset) _openclaw_reset ;;
@@ -32,7 +35,6 @@ _openclaw_root_completion() {
         (health) _openclaw_health ;;
         (sessions) _openclaw_sessions ;;
         (browser) _openclaw_browser ;;
-        (completion) _openclaw_completion ;;
         (acp) _openclaw_acp ;;
         (gateway) _openclaw_gateway ;;
         (daemon) _openclaw_daemon ;;
@@ -50,11 +52,14 @@ _openclaw_root_completion() {
         (docs) _openclaw_docs ;;
         (hooks) _openclaw_hooks ;;
         (webhooks) _openclaw_webhooks ;;
+        (qr) _openclaw_qr ;;
+        (clawbot) _openclaw_clawbot ;;
         (pairing) _openclaw_pairing ;;
         (plugins) _openclaw_plugins ;;
         (channels) _openclaw_channels ;;
         (directory) _openclaw_directory ;;
         (security) _openclaw_security ;;
+        (secrets) _openclaw_secrets ;;
         (skills) _openclaw_skills ;;
         (update) _openclaw_update ;;
       esac
@@ -62,6 +67,14 @@ _openclaw_root_completion() {
   esac
 }
 
+
+_openclaw_completion() {
+  _arguments -C \
+    "(--shell -s)"{--shell,-s}"[Shell to generate completion for (default: zsh)]" \
+    "(--install -i)"{--install,-i}"[Install completion script to shell profile]" \
+    "--write-state[Write completion scripts to $OPENCLAW_STATE_DIR/completions (no stdout)]" \
+    "(--yes -y)"{--yes,-y}"[Skip confirmation (non-interactive)]"
+}
 
 _openclaw_setup() {
   _arguments -C \
@@ -76,22 +89,26 @@ _openclaw_setup() {
 _openclaw_onboard() {
   _arguments -C \
     "--workspace[Agent workspace directory (default: ~/.openclaw/workspace)]" \
-    "--reset[Reset config + credentials + sessions + workspace before running wizard]" \
+    "--reset[Reset config + credentials + sessions before running wizard (workspace only with --reset-scope full)]" \
+    "--reset-scope[Reset scope: config|config+creds+sessions|full]" \
     "--non-interactive[Run without prompts]" \
     "--accept-risk[Acknowledge that agents are powerful and full system access is risky (required for --non-interactive)]" \
     "--flow[Wizard flow: quickstart|advanced|manual]" \
     "--mode[Wizard mode: local|remote]" \
-    "--auth-choice[Auth: setup-token|token|chutes|openai-codex|openai-api-key|xai-api-key|qianfan-api-key|openrouter-api-key|ai-gateway-api-key|cloudflare-ai-gateway-api-key|moonshot-api-key|moonshot-api-key-cn|kimi-code-api-key|synthetic-api-key|venice-api-key|gemini-api-key|zai-api-key|xiaomi-api-key|apiKey|minimax-api|minimax-api-lightning|opencode-zen|skip]" \
+    "--auth-choice[Auth: token|openai-codex|chutes|vllm|apiKey|openai-api-key|mistral-api-key|openrouter-api-key|kilocode-api-key|ai-gateway-api-key|cloudflare-ai-gateway-api-key|moonshot-api-key|kimi-code-api-key|gemini-api-key|zai-api-key|xiaomi-api-key|minimax-api|synthetic-api-key|venice-api-key|together-api-key|huggingface-api-key|opencode-zen|xai-api-key|litellm-api-key|qianfan-api-key|volcengine-api-key|byteplus-api-key|moonshot-api-key-cn|github-copilot|gemini-api-key|google-gemini-cli|zai-api-key|zai-coding-global|zai-coding-cn|zai-global|zai-cn|xiaomi-api-key|minimax-portal|qwen-portal|copilot-proxy|apiKey|opencode-zen|minimax-api|minimax-api-key-cn|minimax-api-lightning|custom-api-key|skip|setup-token|oauth|claude-cli|codex-cli|minimax-cloud|minimax]" \
     "--token-provider[Token provider id (non-interactive; used with --auth-choice token)]" \
     "--token[Token value (non-interactive; used with --auth-choice token)]" \
     "--token-profile-id[Auth profile id (non-interactive; default: <provider>:manual)]" \
     "--token-expires-in[Optional token expiry duration (e.g. 365d, 12h)]" \
-    "--anthropic-api-key[Anthropic API key]" \
-    "--openai-api-key[OpenAI API key]" \
-    "--openrouter-api-key[OpenRouter API key]" \
-    "--ai-gateway-api-key[Vercel AI Gateway API key]" \
+    "--secret-input-mode[API key persistence mode: plaintext|ref (default: plaintext)]" \
     "--cloudflare-ai-gateway-account-id[Cloudflare Account ID]" \
     "--cloudflare-ai-gateway-gateway-id[Cloudflare AI Gateway ID]" \
+    "--anthropic-api-key[Anthropic API key]" \
+    "--openai-api-key[OpenAI API key]" \
+    "--mistral-api-key[Mistral API key]" \
+    "--openrouter-api-key[OpenRouter API key]" \
+    "--kilocode-api-key[Kilo Gateway API key]" \
+    "--ai-gateway-api-key[Vercel AI Gateway API key]" \
     "--cloudflare-ai-gateway-api-key[Cloudflare AI Gateway API key]" \
     "--moonshot-api-key[Moonshot API key]" \
     "--kimi-code-api-key[Kimi Coding API key]" \
@@ -101,13 +118,24 @@ _openclaw_onboard() {
     "--minimax-api-key[MiniMax API key]" \
     "--synthetic-api-key[Synthetic API key]" \
     "--venice-api-key[Venice API key]" \
+    "--together-api-key[Together AI API key]" \
+    "--huggingface-api-key[Hugging Face API key (HF token)]" \
     "--opencode-zen-api-key[OpenCode Zen API key]" \
     "--xai-api-key[xAI API key]" \
+    "--litellm-api-key[LiteLLM API key]" \
     "--qianfan-api-key[QIANFAN API key]" \
+    "--volcengine-api-key[Volcano Engine API key]" \
+    "--byteplus-api-key[BytePlus API key]" \
+    "--custom-base-url[Custom provider base URL]" \
+    "--custom-api-key[Custom provider API key (optional)]" \
+    "--custom-model-id[Custom provider model ID]" \
+    "--custom-provider-id[Custom provider ID (optional; auto-derived by default)]" \
+    "--custom-compatibility[Custom provider API compatibility: openai|anthropic (default: openai)]" \
     "--gateway-port[Gateway port]" \
     "--gateway-bind[Gateway bind: loopback|tailnet|lan|auto|custom]" \
     "--gateway-auth[Gateway auth: token|password]" \
     "--gateway-token[Gateway token (token auth)]" \
+    "--gateway-token-ref-env[Gateway token SecretRef env var name (token auth; e.g. OPENCLAW_GATEWAY_TOKEN)]" \
     "--gateway-password[Gateway password (password auth)]" \
     "--remote-url[Remote Gateway WebSocket URL]" \
     "--remote-token[Remote Gateway token (optional)]" \
@@ -119,6 +147,7 @@ _openclaw_onboard() {
     "--daemon-runtime[Daemon runtime: node|bun]" \
     "--skip-channels[Skip channel setup]" \
     "--skip-skills[Skip skills setup]" \
+    "--skip-search[Skip search provider setup]" \
     "--skip-health[Skip health check]" \
     "--skip-ui[Skip Control UI/TUI prompts]" \
     "--node-manager[Node manager for skills: npm|pnpm|bun]" \
@@ -137,12 +166,23 @@ _openclaw_config_get() {
 
 _openclaw_config_set() {
   _arguments -C \
-    "--json[Parse value as JSON5 (required)]"
+    "--strict-json[Strict JSON5 parsing (error instead of raw string fallback)]" \
+    "--json[Legacy alias for --strict-json]"
 }
 
 _openclaw_config_unset() {
   _arguments -C \
     
+}
+
+_openclaw_config_file() {
+  _arguments -C \
+    
+}
+
+_openclaw_config_validate() {
+  _arguments -C \
+    "--json[Output validation result as JSON]"
 }
 
 _openclaw_config() {
@@ -151,7 +191,7 @@ _openclaw_config() {
   
   _arguments -C \
     "--section[Configure wizard sections (repeatable). Use with no subcommand.]" \
-    "1: :_values 'command' 'get[Get a config value by dot path]' 'set[Set a config value by dot path]' 'unset[Remove a config value by dot path]'" \
+    "1: :_values 'command' 'get[Get a config value by dot path]' 'set[Set a config value by dot path]' 'unset[Remove a config value by dot path]' 'file[Print the active config file path]' 'validate[Validate the current config against the schema without starting the gateway]'" \
     "*::arg:->args"
 
   case $state in
@@ -160,6 +200,42 @@ _openclaw_config() {
         (get) _openclaw_config_get ;;
         (set) _openclaw_config_set ;;
         (unset) _openclaw_config_unset ;;
+        (file) _openclaw_config_file ;;
+        (validate) _openclaw_config_validate ;;
+      esac
+      ;;
+  esac
+}
+
+_openclaw_backup_create() {
+  _arguments -C \
+    "--output[Archive path or destination directory]" \
+    "--json[Output JSON]" \
+    "--dry-run[Print the backup plan without writing the archive]" \
+    "--verify[Verify the archive after writing it]" \
+    "--only-config[Back up only the active JSON config file]" \
+    "--no-include-workspace[Exclude workspace directories from the backup]"
+}
+
+_openclaw_backup_verify() {
+  _arguments -C \
+    "--json[Output JSON]"
+}
+
+_openclaw_backup() {
+  local -a commands
+  local -a options
+  
+  _arguments -C \
+     \
+    "1: :_values 'command' 'create[Write a backup archive for config, credentials, sessions, and workspaces]' 'verify[Validate a backup archive and its embedded manifest]'" \
+    "*::arg:->args"
+
+  case $state in
+    (args)
+      case $line[1] in
+        (create) _openclaw_backup_create ;;
+        (verify) _openclaw_backup_verify ;;
       esac
       ;;
   esac
@@ -208,12 +284,13 @@ _openclaw_message_send() {
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
     "--media[Attach media (image/audio/video/document). Accepts local paths or URLs.]" \
     "--buttons[Telegram inline keyboard buttons as JSON (array of button rows)]" \
+    "--components[Discord components payload as JSON]" \
     "--card[Adaptive Card JSON object (when supported by the channel)]" \
     "--reply-to[Reply-to message id]" \
     "--thread-id[Thread id (Telegram forum thread)]" \
     "--gif-playback[Treat video media as GIF playback (WhatsApp only).]" \
-    "--silent[Send message silently without notification (Telegram only)]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--silent[Send message silently without notification (Telegram + Discord)]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -222,7 +299,7 @@ _openclaw_message_send() {
 
 _openclaw_message_broadcast() {
   _arguments -C \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -235,7 +312,7 @@ _openclaw_message_broadcast() {
 _openclaw_message_poll() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -243,14 +320,19 @@ _openclaw_message_poll() {
     "--poll-question[Poll question]" \
     "--poll-option[Poll option (repeat 2-12 times)]" \
     "--poll-multi[Allow multiple selections]" \
-    "--poll-duration-hours[Poll duration (Discord)]" \
-    "(--message -m)"{--message,-m}"[Optional message body]"
+    "--poll-duration-hours[Poll duration in hours (Discord)]" \
+    "--poll-duration-seconds[Poll duration in seconds (Telegram; 5-600)]" \
+    "--poll-anonymous[Send an anonymous poll (Telegram)]" \
+    "--poll-public[Send a non-anonymous poll (Telegram)]" \
+    "(--message -m)"{--message,-m}"[Optional message body]" \
+    "--silent[Send poll silently without notification (Telegram + Discord where supported)]" \
+    "--thread-id[Thread id (Telegram forum topic / Slack thread ts)]"
 }
 
 _openclaw_message_react() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -267,7 +349,7 @@ _openclaw_message_react() {
 _openclaw_message_reactions() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -279,7 +361,7 @@ _openclaw_message_reactions() {
 _openclaw_message_read() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -296,7 +378,7 @@ _openclaw_message_edit() {
     "--message-id[Message id]" \
     "(--message -m)"{--message,-m}"[Message body]" \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -308,7 +390,7 @@ _openclaw_message_delete() {
   _arguments -C \
     "--message-id[Message id]" \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -318,7 +400,7 @@ _openclaw_message_delete() {
 _openclaw_message_pin() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -329,7 +411,7 @@ _openclaw_message_pin() {
 _openclaw_message_unpin() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -340,7 +422,7 @@ _openclaw_message_unpin() {
 _openclaw_message_pins() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -351,7 +433,7 @@ _openclaw_message_pins() {
 _openclaw_message_permissions() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -360,7 +442,7 @@ _openclaw_message_permissions() {
 
 _openclaw_message_search() {
   _arguments -C \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -378,19 +460,20 @@ _openclaw_message_thread_create() {
   _arguments -C \
     "--thread-name[Thread name]" \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
     "--verbose[Verbose logging]" \
     "--message-id[Message id (optional)]" \
+    "(--message -m)"{--message,-m}"[Initial thread message text]" \
     "--auto-archive-min[Thread auto-archive minutes]"
 }
 
 _openclaw_message_thread_list() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -405,7 +488,7 @@ _openclaw_message_thread_reply() {
   _arguments -C \
     "(--message -m)"{--message,-m}"[Message body]" \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -436,7 +519,7 @@ _openclaw_message_thread() {
 
 _openclaw_message_emoji_list() {
   _arguments -C \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -447,7 +530,7 @@ _openclaw_message_emoji_list() {
 _openclaw_message_emoji_upload() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -479,7 +562,7 @@ _openclaw_message_emoji() {
 _openclaw_message_sticker_send() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -491,7 +574,7 @@ _openclaw_message_sticker_send() {
 _openclaw_message_sticker_upload() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -524,7 +607,7 @@ _openclaw_message_sticker() {
 _openclaw_message_role_info() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -536,7 +619,7 @@ _openclaw_message_role_add() {
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
     "--role-id[Role id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -548,7 +631,7 @@ _openclaw_message_role_remove() {
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
     "--role-id[Role id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -578,7 +661,7 @@ _openclaw_message_role() {
 _openclaw_message_channel_info() {
   _arguments -C \
     "(--target -t)"{--target,-t}"[Recipient/channel: E.164 for WhatsApp/Signal, Telegram chat id/@username, Discord/Slack channel/user, or iMessage handle/chat_id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -588,7 +671,7 @@ _openclaw_message_channel_info() {
 _openclaw_message_channel_list() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -617,7 +700,7 @@ _openclaw_message_channel() {
 _openclaw_message_member_info() {
   _arguments -C \
     "--user-id[User id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -647,7 +730,7 @@ _openclaw_message_voice_status() {
   _arguments -C \
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -675,7 +758,7 @@ _openclaw_message_voice() {
 _openclaw_message_event_list() {
   _arguments -C \
     "--guild-id[Guild id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -687,7 +770,7 @@ _openclaw_message_event_create() {
     "--guild-id[Guild id]" \
     "--event-name[Event name]" \
     "--start-time[Event start time]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -722,7 +805,7 @@ _openclaw_message_timeout() {
   _arguments -C \
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -736,7 +819,7 @@ _openclaw_message_kick() {
   _arguments -C \
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -748,7 +831,7 @@ _openclaw_message_ban() {
   _arguments -C \
     "--guild-id[Guild id]" \
     "--user-id[User id]" \
-    "--channel[Channel: telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon]" \
+    "--channel[Channel: telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon]" \
     "--account[Channel account id (accountId)]" \
     "--json[Output result as JSON]" \
     "--dry-run[Print payload and skip sending]" \
@@ -816,6 +899,7 @@ _openclaw_memory_index() {
 
 _openclaw_memory_search() {
   _arguments -C \
+    "--query[Search query (alternative to positional argument)]" \
     "--agent[Agent id (default: default agent)]" \
     "--max-results[Max results]" \
     "--min-score[Minimum score]" \
@@ -850,7 +934,7 @@ _openclaw_agent() {
     "--agent[Agent id (overrides routing bindings)]" \
     "--thinking[Thinking level: off | minimal | low | medium | high]" \
     "--verbose[Persist agent verbose level for the session]" \
-    "--channel[Delivery channel: last|telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon (default: whatsapp)]" \
+    "--channel[Delivery channel: last|telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon (omit to use the main session channel)]" \
     "--reply-to[Delivery target override (separate from session routing)]" \
     "--reply-channel[Delivery channel override (separate from routing)]" \
     "--reply-account[Delivery account id override]" \
@@ -864,6 +948,27 @@ _openclaw_agents_list() {
   _arguments -C \
     "--json[Output JSON instead of text]" \
     "--bindings[Include routing bindings]"
+}
+
+_openclaw_agents_bindings() {
+  _arguments -C \
+    "--agent[Filter by agent id]" \
+    "--json[Output JSON instead of text]"
+}
+
+_openclaw_agents_bind() {
+  _arguments -C \
+    "--agent[Agent id (defaults to current default agent)]" \
+    "--bind[Binding to add (repeatable). If omitted, accountId is resolved by channel defaults/hooks.]" \
+    "--json[Output JSON summary]"
+}
+
+_openclaw_agents_unbind() {
+  _arguments -C \
+    "--agent[Agent id (defaults to current default agent)]" \
+    "--bind[Binding to remove (repeatable)]" \
+    "--all[Remove all bindings for this agent]" \
+    "--json[Output JSON summary]"
 }
 
 _openclaw_agents_add() {
@@ -901,13 +1006,16 @@ _openclaw_agents() {
   
   _arguments -C \
      \
-    "1: :_values 'command' 'list[List configured agents]' 'add[Add a new isolated agent]' 'set-identity[Update an agent identity (name/theme/emoji/avatar)]' 'delete[Delete an agent and prune workspace/state]'" \
+    "1: :_values 'command' 'list[List configured agents]' 'bindings[List routing bindings]' 'bind[Add routing bindings for an agent]' 'unbind[Remove routing bindings for an agent]' 'add[Add a new isolated agent]' 'set-identity[Update an agent identity (name/theme/emoji/avatar)]' 'delete[Delete an agent and prune workspace/state]'" \
     "*::arg:->args"
 
   case $state in
     (args)
       case $line[1] in
         (list) _openclaw_agents_list ;;
+        (bindings) _openclaw_agents_bindings ;;
+        (bind) _openclaw_agents_bind ;;
+        (unbind) _openclaw_agents_unbind ;;
         (add) _openclaw_agents_add ;;
         (set-identity) _openclaw_agents_set_identity ;;
         (delete) _openclaw_agents_delete ;;
@@ -935,12 +1043,39 @@ _openclaw_health() {
     "--debug[Alias for --verbose]"
 }
 
+_openclaw_sessions_cleanup() {
+  _arguments -C \
+    "--store[Path to session store (default: resolved from config)]" \
+    "--agent[Agent id to maintain (default: configured default agent)]" \
+    "--all-agents[Run maintenance across all configured agents]" \
+    "--dry-run[Preview maintenance actions without writing]" \
+    "--enforce[Apply maintenance even when configured mode is warn]" \
+    "--fix-missing[Remove store entries whose transcript files are missing (bypasses age/count retention)]" \
+    "--active-key[Protect this session key from budget-eviction]" \
+    "--json[Output JSON]"
+}
+
 _openclaw_sessions() {
+  local -a commands
+  local -a options
+  
   _arguments -C \
     "--json[Output as JSON]" \
     "--verbose[Verbose logging]" \
     "--store[Path to session store (default: resolved from config)]" \
-    "--active[Only show sessions updated within the past N minutes]"
+    "--agent[Agent id to inspect (default: configured default agent)]" \
+    "--all-agents[Aggregate sessions across all configured agents]" \
+    "--active[Only show sessions updated within the past N minutes]" \
+    "1: :_values 'command' 'cleanup[Run session-store maintenance now]'" \
+    "*::arg:->args"
+
+  case $state in
+    (args)
+      case $line[1] in
+        (cleanup) _openclaw_sessions_cleanup ;;
+      esac
+      ;;
+  esac
 }
 
 _openclaw_browser_status() {
@@ -1242,7 +1377,7 @@ _openclaw_browser_trace_start() {
 
 _openclaw_browser_trace_stop() {
   _arguments -C \
-    "--out[Output path for the trace zip]" \
+    "--out[Output path within openclaw temp dir (e.g. trace.zip or /tmp/openclaw/trace.zip)]" \
     "--target-id[CDP target id (or unique prefix)]"
 }
 
@@ -1396,7 +1531,7 @@ _openclaw_browser_set_offline() {
 
 _openclaw_browser_set_headers() {
   _arguments -C \
-    "--json[JSON object of headers]" \
+    "--headers-json[JSON object of headers]" \
     "--target-id[CDP target id (or unique prefix)]"
 }
 
@@ -1523,14 +1658,6 @@ _openclaw_browser() {
   esac
 }
 
-_openclaw_completion() {
-  _arguments -C \
-    "(--shell -s)"{--shell,-s}"[Shell to generate completion for (default: zsh)]" \
-    "(--install -i)"{--install,-i}"[Install completion script to shell profile]" \
-    "--write-state[Write completion scripts to $OPENCLAW_STATE_DIR/completions (no stdout)]" \
-    "(--yes -y)"{--yes,-y}"[Skip confirmation (non-interactive)]"
-}
-
 _openclaw_acp_client() {
   _arguments -C \
     "--cwd[Working directory for the ACP session]" \
@@ -1547,12 +1674,15 @@ _openclaw_acp() {
   _arguments -C \
     "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
     "--token[Gateway token (if required)]" \
+    "--token-file[Read gateway token from file]" \
     "--password[Gateway password (if required)]" \
+    "--password-file[Read gateway password from file]" \
     "--session[Default session key (e.g. agent:main:main)]" \
     "--session-label[Default session label to resolve]" \
     "--require-existing[Fail if the session key/label does not exist]" \
     "--reset-session[Reset the session key before first use]" \
     "--no-prefix-cwd[Do not prefix prompts with the working directory]" \
+    "--provenance[ACP provenance mode: off, meta, or meta+receipt]" \
     "(--verbose -v)"{--verbose,-v}"[Verbose logging to stderr]" \
     "1: :_values 'command' 'client[Run an interactive ACP client against the local ACP bridge]'" \
     "*::arg:->args"
@@ -1571,8 +1701,9 @@ _openclaw_gateway_run() {
     "--port[Port for the gateway WebSocket]" \
     "--bind[Bind mode (\"loopback\"|\"lan\"|\"tailnet\"|\"auto\"|\"custom\"). Defaults to config gateway.bind (or loopback).]" \
     "--token[Shared token required in connect.params.auth.token (default: OPENCLAW_GATEWAY_TOKEN env if set)]" \
-    "--auth[Gateway auth mode (\"token\"|\"password\")]" \
+    "--auth[Gateway auth mode (\"none\"|\"token\"|\"password\"|\"trusted-proxy\")]" \
     "--password[Password for auth mode=password]" \
+    "--password-file[Read gateway password from file]" \
     "--tailscale[Tailscale exposure mode (\"off\"|\"serve\"|\"funnel\")]" \
     "--tailscale-reset-on-exit[Reset Tailscale serve/funnel configuration on shutdown]" \
     "--allow-unconfigured[Allow gateway start without gateway.mode=local in config]" \
@@ -1685,8 +1816,9 @@ _openclaw_gateway() {
     "--port[Port for the gateway WebSocket]" \
     "--bind[Bind mode (\"loopback\"|\"lan\"|\"tailnet\"|\"auto\"|\"custom\"). Defaults to config gateway.bind (or loopback).]" \
     "--token[Shared token required in connect.params.auth.token (default: OPENCLAW_GATEWAY_TOKEN env if set)]" \
-    "--auth[Gateway auth mode (\"token\"|\"password\")]" \
+    "--auth[Gateway auth mode (\"none\"|\"token\"|\"password\"|\"trusted-proxy\")]" \
     "--password[Password for auth mode=password]" \
+    "--password-file[Read gateway password from file]" \
     "--tailscale[Tailscale exposure mode (\"off\"|\"serve\"|\"funnel\")]" \
     "--tailscale-reset-on-exit[Reset Tailscale serve/funnel configuration on shutdown]" \
     "--allow-unconfigured[Allow gateway start without gateway.mode=local in config]" \
@@ -1794,6 +1926,7 @@ _openclaw_logs() {
     "--json[Emit JSON log lines]" \
     "--plain[Plain text output (no ANSI styling)]" \
     "--no-color[Disable ANSI colors]" \
+    "--local-time[Display timestamps in local timezone]" \
     "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
     "--token[Gateway token (if required)]" \
     "--timeout[Timeout in ms]" \
@@ -2369,6 +2502,18 @@ _openclaw_nodes_notify() {
     "--json[Output JSON]"
 }
 
+_openclaw_nodes_push() {
+  _arguments -C \
+    "--node[Node id, name, or IP]" \
+    "--title[Push title]" \
+    "--body[Push body]" \
+    "--environment[Override APNs environment]" \
+    "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
+    "--token[Gateway token (if required)]" \
+    "--timeout[Timeout in ms]" \
+    "--json[Output JSON]"
+}
+
 _openclaw_nodes_canvas_snapshot() {
   _arguments -C \
     "--node[Node id, name, or IP]" \
@@ -2620,7 +2765,7 @@ _openclaw_nodes() {
   
   _arguments -C \
      \
-    "1: :_values 'command' 'status[List known nodes with connection status and capabilities]' 'describe[Describe a node (capabilities + supported invoke commands)]' 'list[List pending and paired nodes]' 'pending[List pending pairing requests]' 'approve[Approve a pending pairing request]' 'reject[Reject a pending pairing request]' 'rename[Rename a paired node (display name override)]' 'invoke[Invoke a command on a paired node]' 'run[Run a shell command on a node (mac only)]' 'notify[Send a local notification on a node (mac only)]' 'canvas[Capture or render canvas content from a paired node]' 'camera[Capture camera media from a paired node]' 'screen[Capture screen recordings from a paired node]' 'location[Fetch location from a paired node]'" \
+    "1: :_values 'command' 'status[List known nodes with connection status and capabilities]' 'describe[Describe a node (capabilities + supported invoke commands)]' 'list[List pending and paired nodes]' 'pending[List pending pairing requests]' 'approve[Approve a pending pairing request]' 'reject[Reject a pending pairing request]' 'rename[Rename a paired node (display name override)]' 'invoke[Invoke a command on a paired node]' 'run[Run a shell command on a node (mac only)]' 'notify[Send a local notification on a node (mac only)]' 'push[Send an APNs test push to an iOS node]' 'canvas[Capture or render canvas content from a paired node]' 'camera[Capture camera media from a paired node]' 'screen[Capture screen recordings from a paired node]' 'location[Fetch location from a paired node]'" \
     "*::arg:->args"
 
   case $state in
@@ -2636,6 +2781,7 @@ _openclaw_nodes() {
         (invoke) _openclaw_nodes_invoke ;;
         (run) _openclaw_nodes_run ;;
         (notify) _openclaw_nodes_notify ;;
+        (push) _openclaw_nodes_push ;;
         (canvas) _openclaw_nodes_canvas ;;
         (camera) _openclaw_nodes_camera ;;
         (screen) _openclaw_nodes_screen ;;
@@ -2654,8 +2800,29 @@ _openclaw_devices_list() {
     "--json[Output JSON]"
 }
 
+_openclaw_devices_remove() {
+  _arguments -C \
+    "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
+    "--token[Gateway token (if required)]" \
+    "--password[Gateway password (password auth)]" \
+    "--timeout[Timeout in ms]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_devices_clear() {
+  _arguments -C \
+    "--pending[Also reject all pending pairing requests]" \
+    "--yes[Confirm destructive clear]" \
+    "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
+    "--token[Gateway token (if required)]" \
+    "--password[Gateway password (password auth)]" \
+    "--timeout[Timeout in ms]" \
+    "--json[Output JSON]"
+}
+
 _openclaw_devices_approve() {
   _arguments -C \
+    "--latest[Approve the most recent pending request]" \
     "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
     "--token[Gateway token (if required)]" \
     "--password[Gateway password (password auth)]" \
@@ -2701,13 +2868,15 @@ _openclaw_devices() {
   
   _arguments -C \
      \
-    "1: :_values 'command' 'list[List pending and paired devices]' 'approve[Approve a pending device pairing request]' 'reject[Reject a pending device pairing request]' 'rotate[Rotate a device token for a role]' 'revoke[Revoke a device token for a role]'" \
+    "1: :_values 'command' 'list[List pending and paired devices]' 'remove[Remove a paired device entry]' 'clear[Clear paired devices from the gateway table]' 'approve[Approve a pending device pairing request]' 'reject[Reject a pending device pairing request]' 'rotate[Rotate a device token for a role]' 'revoke[Revoke a device token for a role]'" \
     "*::arg:->args"
 
   case $state in
     (args)
       case $line[1] in
         (list) _openclaw_devices_list ;;
+        (remove) _openclaw_devices_remove ;;
+        (clear) _openclaw_devices_clear ;;
         (approve) _openclaw_devices_approve ;;
         (reject) _openclaw_devices_reject ;;
         (rotate) _openclaw_devices_rotate ;;
@@ -2866,21 +3035,26 @@ _openclaw_cron_add() {
     "--keep-after-run[Keep one-shot job after it succeeds]" \
     "--agent[Agent id for this job]" \
     "--session[Session target (main|isolated)]" \
+    "--session-key[Session key for job routing (e.g. agent:my-agent:my-session)]" \
     "--wake[Wake mode (now|next-heartbeat)]" \
     "--at[Run once at time (ISO) or +duration (e.g. 20m)]" \
     "--every[Run every duration (e.g. 10m, 1h)]" \
-    "--cron[Cron expression (5-field)]" \
+    "--cron[Cron expression (5-field or 6-field with seconds)]" \
     "--tz[Timezone for cron expressions (IANA)]" \
+    "--stagger[Cron stagger window (e.g. 30s, 5m)]" \
+    "--exact[Disable cron staggering (set stagger to 0)]" \
     "--system-event[System event payload (main session)]" \
     "--message[Agent message payload]" \
     "--thinking[Thinking level for agent jobs (off|minimal|low|medium|high)]" \
     "--model[Model override for agent jobs (provider/model or alias)]" \
     "--timeout-seconds[Timeout seconds for agent jobs]" \
+    "--light-context[Use lightweight bootstrap context for agent jobs]" \
     "--announce[Announce summary to a chat (subagent-style)]" \
     "--deliver[Deprecated (use --announce). Announces a summary to a chat.]" \
     "--no-deliver[Disable announce delivery and skip main-session summary]" \
-    "--channel[Delivery channel (last|whatsapp)]" \
+    "--channel[Delivery channel (last)]" \
     "--to[Delivery destination (E.164, Telegram chatId, or Discord channel/user)]" \
+    "--account[Channel account id for delivery (multi-account setups)]" \
     "--best-effort-deliver[Do not fail the job if delivery fails]" \
     "--json[Output JSON]" \
     "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
@@ -2944,23 +3118,38 @@ _openclaw_cron_edit() {
     "--session[Session target (main|isolated)]" \
     "--agent[Set agent id]" \
     "--clear-agent[Unset agent and use default]" \
+    "--session-key[Set session key for job routing]" \
+    "--clear-session-key[Unset session key]" \
     "--wake[Wake mode (now|next-heartbeat)]" \
     "--at[Set one-shot time (ISO) or duration like 20m]" \
     "--every[Set interval duration like 10m]" \
     "--cron[Set cron expression]" \
     "--tz[Timezone for cron expressions (IANA)]" \
+    "--stagger[Cron stagger window (e.g. 30s, 5m)]" \
+    "--exact[Disable cron staggering (set stagger to 0)]" \
     "--system-event[Set systemEvent payload]" \
     "--message[Set agentTurn payload message]" \
     "--thinking[Thinking level for agent jobs]" \
     "--model[Model override for agent jobs]" \
     "--timeout-seconds[Timeout seconds for agent jobs]" \
+    "--light-context[Enable lightweight bootstrap context for agent jobs]" \
+    "--no-light-context[Disable lightweight bootstrap context for agent jobs]" \
     "--announce[Announce summary to a chat (subagent-style)]" \
     "--deliver[Deprecated (use --announce). Announces a summary to a chat.]" \
     "--no-deliver[Disable announce delivery]" \
-    "--channel[Delivery channel (last|whatsapp)]" \
+    "--channel[Delivery channel (last)]" \
     "--to[Delivery destination (E.164, Telegram chatId, or Discord channel/user)]" \
+    "--account[Channel account id for delivery (multi-account setups)]" \
     "--best-effort-deliver[Do not fail job if delivery fails]" \
     "--no-best-effort-deliver[Fail job when delivery fails]" \
+    "--failure-alert[Enable failure alerts for this job]" \
+    "--no-failure-alert[Disable failure alerts for this job]" \
+    "--failure-alert-after[Alert after N consecutive job errors]" \
+    "--failure-alert-channel[Failure alert channel (last)]" \
+    "--failure-alert-to[Failure alert destination]" \
+    "--failure-alert-cooldown[Minimum time between alerts (e.g. 1h, 30m)]" \
+    "--failure-alert-mode[Failure alert delivery mode (announce or webhook)]" \
+    "--failure-alert-account-id[Account ID for failure alert channel (multi-account setups)]" \
     "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
     "--token[Gateway token (if required)]" \
     "--timeout[Timeout in ms]" \
@@ -3051,7 +3240,8 @@ _openclaw_hooks_disable() {
 
 _openclaw_hooks_install() {
   _arguments -C \
-    "(--link -l)"{--link,-l}"[Link a local path instead of copying]"
+    "(--link -l)"{--link,-l}"[Link a local path instead of copying]" \
+    "--pin[Record npm installs as exact resolved <name>@<version>]"
 }
 
 _openclaw_hooks_update() {
@@ -3164,15 +3354,59 @@ _openclaw_webhooks() {
   esac
 }
 
+_openclaw_qr() {
+  _arguments -C \
+    "--remote[Use gateway.remote.url and gateway.remote token/password (ignores device-pair publicUrl)]" \
+    "--url[Override gateway URL used in the setup payload]" \
+    "--public-url[Override gateway public URL used in the setup payload]" \
+    "--token[Override gateway token for setup payload]" \
+    "--password[Override gateway password for setup payload]" \
+    "--setup-code-only[Print only the setup code]" \
+    "--no-ascii[Skip ASCII QR rendering]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_clawbot_qr() {
+  _arguments -C \
+    "--remote[Use gateway.remote.url and gateway.remote token/password (ignores device-pair publicUrl)]" \
+    "--url[Override gateway URL used in the setup payload]" \
+    "--public-url[Override gateway public URL used in the setup payload]" \
+    "--token[Override gateway token for setup payload]" \
+    "--password[Override gateway password for setup payload]" \
+    "--setup-code-only[Print only the setup code]" \
+    "--no-ascii[Skip ASCII QR rendering]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_clawbot() {
+  local -a commands
+  local -a options
+  
+  _arguments -C \
+     \
+    "1: :_values 'command' 'qr[Generate an iOS pairing QR code and setup code]'" \
+    "*::arg:->args"
+
+  case $state in
+    (args)
+      case $line[1] in
+        (qr) _openclaw_clawbot_qr ;;
+      esac
+      ;;
+  esac
+}
+
 _openclaw_pairing_list() {
   _arguments -C \
-    "--channel[Channel (whatsapp)]" \
+    "--channel[Channel (telegram, whatsapp)]" \
+    "--account[Account id (for multi-account channels)]" \
     "--json[Print JSON]"
 }
 
 _openclaw_pairing_approve() {
   _arguments -C \
-    "--channel[Channel (whatsapp)]" \
+    "--channel[Channel (telegram, whatsapp)]" \
+    "--account[Account id (for multi-account channels)]" \
     "--notify[Notify the requester on the same channel]"
 }
 
@@ -3217,9 +3451,18 @@ _openclaw_plugins_disable() {
     
 }
 
+_openclaw_plugins_uninstall() {
+  _arguments -C \
+    "--keep-files[Keep installed files on disk]" \
+    "--keep-config[Deprecated alias for --keep-files]" \
+    "--force[Skip confirmation prompt]" \
+    "--dry-run[Show what would be removed without making changes]"
+}
+
 _openclaw_plugins_install() {
   _arguments -C \
-    "(--link -l)"{--link,-l}"[Link a local path instead of copying]"
+    "(--link -l)"{--link,-l}"[Link a local path instead of copying]" \
+    "--pin[Record npm installs as exact resolved <name>@<version>]"
 }
 
 _openclaw_plugins_update() {
@@ -3239,7 +3482,7 @@ _openclaw_plugins() {
   
   _arguments -C \
      \
-    "1: :_values 'command' 'list[List discovered plugins]' 'info[Show plugin details]' 'enable[Enable a plugin in config]' 'disable[Disable a plugin in config]' 'install[Install a plugin (path, archive, or npm spec)]' 'update[Update installed plugins (npm installs only)]' 'doctor[Report plugin load issues]'" \
+    "1: :_values 'command' 'list[List discovered plugins]' 'info[Show plugin details]' 'enable[Enable a plugin in config]' 'disable[Disable a plugin in config]' 'uninstall[Uninstall a plugin]' 'install[Install a plugin (path, archive, or npm spec)]' 'update[Update installed plugins (npm installs only)]' 'doctor[Report plugin load issues]'" \
     "*::arg:->args"
 
   case $state in
@@ -3249,6 +3492,7 @@ _openclaw_plugins() {
         (info) _openclaw_plugins_info ;;
         (enable) _openclaw_plugins_enable ;;
         (disable) _openclaw_plugins_disable ;;
+        (uninstall) _openclaw_plugins_uninstall ;;
         (install) _openclaw_plugins_install ;;
         (update) _openclaw_plugins_update ;;
         (doctor) _openclaw_plugins_doctor ;;
@@ -3272,7 +3516,7 @@ _openclaw_channels_status() {
 
 _openclaw_channels_capabilities() {
   _arguments -C \
-    "--channel[Channel (all|telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon)]" \
+    "--channel[Channel (all|telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon)]" \
     "--account[Account id (only with --channel)]" \
     "--target[Channel target for permission audit (Discord channel:<id>)]" \
     "--timeout[Timeout in ms]" \
@@ -3281,7 +3525,7 @@ _openclaw_channels_capabilities() {
 
 _openclaw_channels_resolve() {
   _arguments -C \
-    "--channel[Channel (telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon)]" \
+    "--channel[Channel (telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon)]" \
     "--account[Account id (accountId)]" \
     "--kind[Target kind (auto|user|group)]" \
     "--json[Output JSON]"
@@ -3289,14 +3533,14 @@ _openclaw_channels_resolve() {
 
 _openclaw_channels_logs() {
   _arguments -C \
-    "--channel[Channel (all|telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon)]" \
+    "--channel[Channel (all|telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon)]" \
     "--lines[Number of lines (default: 200)]" \
     "--json[Output JSON]"
 }
 
 _openclaw_channels_add() {
   _arguments -C \
-    "--channel[Channel (telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon)]" \
+    "--channel[Channel (telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon)]" \
     "--account[Account id (default when omitted)]" \
     "--name[Display name for this account]" \
     "--token[Bot token (Telegram/Discord)]" \
@@ -3334,21 +3578,21 @@ _openclaw_channels_add() {
 
 _openclaw_channels_remove() {
   _arguments -C \
-    "--channel[Channel (telegram|whatsapp|discord|googlechat|slack|signal|imessage|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|line|zalo|zalouser|tlon)]" \
+    "--channel[Channel (telegram|whatsapp|discord|irc|googlechat|slack|signal|imessage|line|feishu|nostr|msteams|mattermost|nextcloud-talk|matrix|bluebubbles|zalo|zalouser|synology-chat|tlon)]" \
     "--account[Account id (default when omitted)]" \
     "--delete[Delete config entries (no prompt)]"
 }
 
 _openclaw_channels_login() {
   _arguments -C \
-    "--channel[Channel alias (default: whatsapp)]" \
+    "--channel[Channel alias (auto when only one is configured)]" \
     "--account[Account id (accountId)]" \
     "--verbose[Verbose connection logs]"
 }
 
 _openclaw_channels_logout() {
   _arguments -C \
-    "--channel[Channel alias (default: whatsapp)]" \
+    "--channel[Channel alias (auto when only one is configured)]" \
     "--account[Account id (accountId)]"
 }
 
@@ -3494,6 +3738,60 @@ _openclaw_security() {
   esac
 }
 
+_openclaw_secrets_reload() {
+  _arguments -C \
+    "--json[Output JSON]" \
+    "--url[Gateway WebSocket URL (defaults to gateway.remote.url when configured)]" \
+    "--token[Gateway token (if required)]" \
+    "--timeout[Timeout in ms]" \
+    "--expect-final[Wait for final response (agent)]"
+}
+
+_openclaw_secrets_audit() {
+  _arguments -C \
+    "--check[Exit non-zero when findings are present]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_secrets_configure() {
+  _arguments -C \
+    "--apply[Apply changes immediately after preflight]" \
+    "--yes[Skip apply confirmation prompt]" \
+    "--providers-only[Configure secrets.providers only, skip credential mapping]" \
+    "--skip-provider-setup[Skip provider setup and only map credential fields to existing providers]" \
+    "--agent[Agent id for auth-profiles targets (default: configured default agent)]" \
+    "--plan-out[Write generated plan JSON to a file]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_secrets_apply() {
+  _arguments -C \
+    "--from[Path to plan JSON]" \
+    "--dry-run[Validate/preflight only]" \
+    "--json[Output JSON]"
+}
+
+_openclaw_secrets() {
+  local -a commands
+  local -a options
+  
+  _arguments -C \
+     \
+    "1: :_values 'command' 'reload[Re-resolve secret references and atomically swap runtime snapshot]' 'audit[Audit plaintext secrets, unresolved refs, and precedence drift]' 'configure[Interactive secrets helper (provider setup + SecretRef mapping + preflight)]' 'apply[Apply a previously generated secrets plan]'" \
+    "*::arg:->args"
+
+  case $state in
+    (args)
+      case $line[1] in
+        (reload) _openclaw_secrets_reload ;;
+        (audit) _openclaw_secrets_audit ;;
+        (configure) _openclaw_secrets_configure ;;
+        (apply) _openclaw_secrets_apply ;;
+      esac
+      ;;
+  esac
+}
+
 _openclaw_skills_list() {
   _arguments -C \
     "--json[Output as JSON]" \
@@ -3549,6 +3847,7 @@ _openclaw_update() {
   _arguments -C \
     "--json[Output result as JSON]" \
     "--no-restart[Skip restarting the gateway service after a successful update]" \
+    "--dry-run[Preview update actions without making changes]" \
     "--channel[Persist update channel (git + npm)]" \
     "--tag[Override npm dist-tag or version for this update]" \
     "--timeout[Timeout for each update step in seconds (default: 1200)]" \

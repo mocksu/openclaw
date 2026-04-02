@@ -1,0 +1,1 @@
+console.log('FAST WORD 本地后端测试成功，Micky 已就绪！');

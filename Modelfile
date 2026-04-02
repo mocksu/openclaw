@@ -1,0 +1,14 @@
+FROM ./Qwen3-Next-REAP-15B-A3B-Thinking-Q4_K_XL.gguf
+
+# 设置思考模型的温度，适合逻辑分析
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+
+# 必须告诉模型它是一个思维模型
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+<|thought|>
+"""

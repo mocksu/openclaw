@@ -3,3 +3,18 @@
 node_modules/
 __pycache__/
 *.log
+.aider*
+# Ignore local LLM weights and binaries
+*.gguf
+*.bin
+*.pt
+models/blobs/
+
+# 允许上传你的模型配置文件
+!models/Modelfile
+!*.Modelfile
+
+# Ignore local config backups containing API Keys
+openclaw.json.*
+openclaw.json202*
+openclaw.json_*

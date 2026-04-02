@@ -5,8 +5,8 @@ systemctl --user stop openclaw-gateway
 killall -9 openclaw
 
 # 2. 清除所有历史记忆（非常重要！）
-rm -rf ~/.openclaw/agents/main/sessions/*
-rm -rf ~/.openclaw/agents/main/queue/*
+# rm -rf ~/.openclaw/agents/main/sessions/*
+# rm -rf ~/.openclaw/agents/main/queue/*
 
 # 3. start
 systemctl --user start openclaw-gateway
